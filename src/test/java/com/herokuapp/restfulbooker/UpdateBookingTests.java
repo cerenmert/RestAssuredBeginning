@@ -31,14 +31,15 @@ public class UpdateBookingTests extends BaseTest{
         bookingdates.put("checkout", "2021-06-02");
         body.put("bookingdates", bookingdates); //we add "bookingdates jsonObject" to body
 
-        //Update Response by using auth.
-        Response responseUpdate = RestAssured.given().
-                auth().preemptive().basic("admin","password123").
-                contentType(ContentType.JSON).body(body.toString()).
-                put("https://restful-booker.herokuapp.com/booking/"  +bookingID);
+        //Update booking by using auth. token
+        Response responseUpdate = RestAssured.given(spec)
+                .auth().preemptive().basic("admin","password123")
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .put("/booking/"  +bookingID);
         responseUpdate.print();
 
-        //Verify response is 200
+        //Assert that response's status is 200
         Assert.assertEquals(responseUpdate.getStatusCode(),200,"Status code should be 200, but it is not");
 
         //Verify all fields
